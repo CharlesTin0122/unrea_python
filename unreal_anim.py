@@ -73,8 +73,8 @@ else:
 """请用unreal Python API帮我写一个脚本，该脚本用于处理动画资产中的骨骼位置，处理方法是逐帧对齐两个骨骼的位置和旋转。"""
 
 # 获取要处理的骨骼动画资产的引用
-skeleton_asset_path = "/Game/Path/To/Your/SkeletonAsset"
-skeleton_asset = unreal.load_object(None, skeleton_asset_path, unreal.UAnimSequence)
+skeleton_asset_path = r'/Game/Maps/Test/FHY/mod1Weapon/AnimSequence/CrossBow_Stand_Aim_Fire_To_Relax_IPC_mod1'
+skeleton_asset = unreal.load_object(None, skeleton_asset_path, unreal.AnimSequence)
 
 # 获取骨骼的引用
 skeleton = skeleton_asset.get_skeleton()
