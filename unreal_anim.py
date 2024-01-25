@@ -70,6 +70,10 @@ else:
     print(f"无法找到骨骼 {bone_name}")
 
 
+
+
+
+
 """请用unreal Python API帮我写一个脚本，该脚本用于处理动画资产中的骨骼位置，处理方法是逐帧对齐两个骨骼的位置和旋转。"""
 
 # 获取要处理的骨骼动画资产的引用
@@ -114,3 +118,45 @@ if bone1 and bone2:
 
 else:
     print("无法找到一个或两个骨骼")
+
+
+
+
+
+
+'''在Unreal Python API 中有办法修改动画资产中的骨骼位置么？比如让一个骨骼完全跟随另一个骨骼，如果有的话，应该怎么写脚本？'''
+
+
+# 获取要修改的骨骼的引用
+skeleton = unreal.Skeleton()
+skeleton_asset = unreal.SkeletonAsset()
+skeleton_asset.skeleton = skeleton
+
+# 获取要跟随的骨骼的引用
+follow_bone_name = "BoneToFollow"
+follow_bone_index = skeleton_asset.get_bone_index(follow_bone_name)
+
+# 获取要修改的骨骼的引用
+target_bone_name = "BoneToModify"
+target_bone_index = skeleton_asset.get_bone_index(target_bone_name)
+
+# 获取动画资产的所有骨骼
+animation_assets = unreal.AnimationAsset().get_all_animation_assets()
+
+# 遍历所有动画资产，并修改骨骼位置
+for animation_asset in animation_assets:
+    animation_sequence = animation_asset.get_editor_property("sequence")
+    if animation_sequence:
+        # 获取动画序列的轨道
+        bone_track = animation_sequence.find_track(target_bone_index)
+        if bone_track:
+            # 获取轨道上的关键帧
+            bone_track_keys = bone_track.get_editor_property("pos_keys")
+            for key in bone_track_keys:
+                # 获取跟随骨骼的位置
+                follow_bone_transform = skeleton_asset.get_ref_pose_transform(follow_bone_index)
+                # 设置目标骨骼的位置为跟随骨骼的位置
+                key.position = follow_bone_transform.translation
+
+# 保存修改后的动画资产
+unreal.EditorAssetLibrary.save_loaded_asset(animation_assets)
