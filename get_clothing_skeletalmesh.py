@@ -55,7 +55,7 @@ def get_clothing_assets(unreal_path:str):
                 # 如果该资产有布料信息
                 if skeletal_asset.mesh_clothing_assets:
                     # 如果是，则将资产添加到列表
-                    assets.append(skeletal_asset)
+                    assets.append(skeletal_asset.get_path_name())
                     
             # 如果进度条被取消，则停止复制资产
             if not running:
