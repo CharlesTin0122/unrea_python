@@ -13,12 +13,12 @@ skeleton_modifier = unreal.SkeletonModifier()
 # 创建a和b两根骨骼
 
 skeleton_modifier.set_skeletal_mesh(skel_mesh)
-skeleton_modifier.add_bones(
-    ["a", "b"], ["root", "root"], [unreal.Transform(), unreal.Transform()]
-)
+# skeleton_modifier.add_bones(
+#     ["a", "b"], ["root", "root"], [unreal.Transform(), unreal.Transform()]
+# )
 
 # 将骨骼b设为骨骼a的父级
-skeleton_modifier.parent_bone("b", "a")
+# skeleton_modifier.parent_bone("b", "a")
 all_bone_names = skeleton_modifier.get_all_bone_names()
 for bone_name in all_bone_names:
     new_bone_name = bone_name.replace("_", "-")
