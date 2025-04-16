@@ -1,154 +1,90 @@
 import unreal
 
-anim_lib = unreal.AnimationLibrary()
-anim_path = r"/Game/Mannequin/Animation/ClimbStart_Anim_Retargeted"
-anim_asset = unreal.load_asset(anim_path)
-for x in dir(anim_lib):
-    print(x)
 
-[
-    "__class__",
-    "__delattr__",
-    "__dir__",
-    "__doc__",
-    "__eq__",
-    "__format__",
-    "__ge__",
-    "__getattribute__",
-    "__gt__",
-    "__hash__",
-    "__init__",
-    "__init_subclass__",
-    "__le__",
-    "__lt__",
-    "__ne__",
-    "__new__",
-    "__reduce__",
-    "__reduce_ex__",
-    "__repr__",
-    "__setattr__",
-    "__sizeof__",
-    "__str__",
-    "__subclasshook__",
-    "_post_init",
-    "_wrapper_meta_data",
-    "add_animation_notify_event",
-    "add_animation_notify_event_object",
-    "add_animation_notify_state_event",
-    "add_animation_notify_state_event_object",
-    "add_animation_notify_track",
-    "add_animation_sync_marker",
-    "add_curve",
-    "add_float_curve_key",
-    "add_float_curve_keys",
-    "add_meta_data",
-    "add_meta_data_object",
-    "add_transformation_curve_key",
-    "add_transformation_curve_keys",
-    "add_vector_curve_key",
-    "add_vector_curve_keys",
-    "add_virtual_bone",
-    "call_method",
-    "cast",
-    "contains_meta_data_of_class",
-    "copy_anim_notifies_from_sequence",
-    "does_bone_name_exist",
-    "does_curve_exist",
-    "finalize_bone_animation",
-    "find_bone_path_to_root",
-    "get_additive_animation_type",
-    "get_additive_base_pose_type",
-    "get_anim_notify_event_trigger_time",
-    "get_animation_curve_names",
-    "get_animation_interpolation_type",
-    "get_animation_notify_event_names",
-    "get_animation_notify_events",
-    "get_animation_notify_events_for_track",
-    "get_animation_notify_track_names",
-    "get_animation_sync_markers",
-    "get_animation_sync_markers_for_track",
-    "get_animation_track_names",
-    "get_bone_compression_settings",
-    "get_bone_pose_for_frame",
-    "get_bone_pose_for_time",
-    "get_bone_poses_for_frame",
-    "get_bone_poses_for_time",
-    "get_class",
-    "get_curve_compression_settings",
-    "get_default_object",
-    "get_editor_property",
-    "get_float_keys",
-    "get_fname",
-    "get_frame_at_time",
-    "get_full_name",
-    "get_meta_data",
-    "get_meta_data_of_class",
-    "get_name",
-    "get_num_frames",
-    "get_outer",
-    "get_outermost",
-    "get_path_name",
-    "get_rate_scale",
-    "get_raw_track_data",
-    "get_raw_track_position_data",
-    "get_raw_track_rotation_data",
-    "get_raw_track_scale_data",
-    "get_root_motion_lock_type",
-    "get_sequence_length",
-    "get_time_at_frame",
-    "get_transformation_keys",
-    "get_typed_outer",
-    "get_unique_marker_names",
-    "get_vector_keys",
-    "get_world",
-    "is_root_motion_enabled",
-    "is_root_motion_lock_forced",
-    "is_valid_anim_notify_track_name",
-    "is_valid_animation_sync_marker_name",
-    "is_valid_raw_animation_track_name",
-    "is_valid_time",
-    "modify",
-    "remove_all_animation_notify_tracks",
-    "remove_all_animation_sync_markers",
-    "remove_all_bone_animation",
-    "remove_all_curve_data",
-    "remove_all_meta_data",
-    "remove_all_virtual_bones",
-    "remove_animation_notify_events_by_name",
-    "remove_animation_notify_events_by_track",
-    "remove_animation_notify_track",
-    "remove_animation_sync_markers_by_name",
-    "remove_animation_sync_markers_by_track",
-    "remove_bone_animation",
-    "remove_curve",
-    "remove_meta_data",
-    "remove_meta_data_of_class",
-    "remove_virtual_bone",
-    "remove_virtual_bones",
-    "rename",
-    "replace_anim_notifies",
-    "replace_anim_notify_states",
-    "set_additive_animation_type",
-    "set_additive_base_pose_type",
-    "set_animation_interpolation_type",
-    "set_bone_compression_settings",
-    "set_curve_compression_settings",
-    "set_editor_properties",
-    "set_editor_property",
-    "set_is_root_motion_lock_forced",
-    "set_rate_scale",
-    "set_root_motion_enabled",
-    "set_root_motion_lock_type",
-    "static_class",
-    "write_anim_bone_trans_forms",
-]
+#  1. 使用 Skeleton 获取骨骼层次信息
+def get_parent_bone_name(asset, bone_name):
+    """
+    通过骨骼名称获取父骨骼的名称
+    Args:
+        asset (unreal.AnimSequence): 动画资产
+        bone_name (str): 目标骨骼名称
+    Returns:
+        str: 父骨骼名称（如果存在），否则返回 None
+    """
+    skeleton = asset.get_skeleton()  # 获取动画资产的 Skeleton
+    if skeleton:
+        parent_bone_index = skeleton.get_parent_index(bone_name)  # 获取父骨骼索引
+        if parent_bone_index != -1:  # 如果有父骨骼
+            return skeleton.get_bone_name(parent_bone_index)  # 返回父骨骼的名称
+    return None  # 如果没有父骨骼或骨骼名称无效
 
-assert isinstance(anim_asset, unreal.AnimSequence)
-num_frames = anim_lib.get_num_frames(anim_asset)
-for frame in range(num_frames):
-    bone_transform = anim_lib.get_bone_pose_for_frame(
-        anim_asset, "ball_r", frame, False
-    )
-    curve_name = "ik_foot_l"
-    anim_lib.add_transformation_curve_key(anim_asset, curve_name, frame, bone_transform)
-    unreal.log(bone_transform)
+
+# 2. 使用骨骼索引操作
+def get_parent_bone_name_via_index(asset, bone_name):
+    """
+    使用骨骼索引获取父骨骼名称
+    Args:
+        asset (unreal.AnimSequence): 动画资产
+        bone_name (str): 目标骨骼名称
+    Returns:
+        str: 父骨骼名称（如果存在）
+    """
+    skeleton = asset.get_skeleton()
+    if skeleton:
+        bone_index = skeleton.get_bone_index(bone_name)
+        if bone_index != -1:
+            parent_index = skeleton.get_parent_index(bone_index)
+            if parent_index != -1:
+                return skeleton.get_bone_name(parent_index)
+    return None
+
+
+# 3. 获取骨骼树结构
+def get_bone_hierarchy(asset):
+    """
+    获取骨骼层次结构
+    Args:
+        asset (unreal.AnimSequence): 动画资产
+    Returns:
+        dict: 骨骼到其父骨骼的映射
+    """
+    skeleton = asset.get_skeleton()
+    if not skeleton:
+        return {}
+
+    bone_hierarchy = {}
+    bone_count = skeleton.get_bone_count()
+
+    for bone_index in range(bone_count):
+        bone_name = skeleton.get_bone_name(bone_index)
+        parent_index = skeleton.get_parent_index(bone_index)
+        parent_name = (
+            skeleton.get_bone_name(parent_index) if parent_index != -1 else None
+        )
+        bone_hierarchy[bone_name] = parent_name
+
+    return bone_hierarchy
+
+
+# 4. 使用 Reference Skeleton
+def get_parent_bone_from_reference_skeleton(asset, bone_name):
+    """
+    使用 Reference Skeleton 获取父骨骼的名称
+    Args:
+        asset (unreal.AnimSequence): 动画资产
+        bone_name (str): 目标骨骼名称
+    Returns:
+        str: 父骨骼名称
+    """
+    skeleton = asset.get_skeleton()
+    if not skeleton:
+        return None
+
+    reference_skeleton = skeleton.get_reference_skeleton()  # 获取 Reference Skeleton
+    bone_index = reference_skeleton.find_bone_index(bone_name)  # 获取骨骼索引
+
+    if bone_index != -1:
+        parent_index = reference_skeleton.get_parent_index(bone_index)  # 获取父骨骼索引
+        if parent_index != -1:
+            return reference_skeleton.get_bone_name(parent_index)  # 返回父骨骼名称
+    return None
