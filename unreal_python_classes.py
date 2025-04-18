@@ -22,9 +22,14 @@ anim_lib = unreal.AnimationLibrary()
 # 它提供了对动画数据的低级别访问，允许用户动态修改动画的骨骼轨迹、帧数据等。
 AnimDataCtrler = unreal.AnimationDataController()
 
+anim_pose_ext = unreal.AnimPoseExtensions()
+MathLibrary = unreal.MathLibrary()
+AnimDataCtrler.set_bone_track_keys()
+
+dir(AnimDataCtrler)
 # 数学类
 MathLibrary = unreal.MathLibrary()
 # 字符串类
 string_lib = unreal.StringLibrary()
-string_lib.replace("Cherles", "e", "a", SearchCase=unreal.SearchCase.IGNORE_CASE)
+string_lib.replace("Cherles", "e", "a", SearchCase=unreal.SearchCase.CASE_SENSITIVE)
 string_lib.contains("Charles", "a")

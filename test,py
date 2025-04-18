@@ -1,0 +1,72 @@
+import unreal
+
+
+def convert_to_root_motion(animation_asset_path):
+    # Load the animation asset
+    animation_asset = unreal.load_asset(animation_asset_path)
+    if not isinstance(animation_asset, unreal.AnimSequence):
+        raise ValueError("The provided asset is not an AnimSequence type.")
+
+    # Get the animation data controller
+    controller = animation_asset.get_controller()
+
+    # Get the list of bone names
+    bone_names = animation_asset.get_bone_names()
+
+    # Get indices for root and Pelvis bones
+    try:
+        root_bone_index = bone_names.index("root")
+        pelvis_bone_index = bone_names.index("Pelvis")
+    except ValueError:
+        raise ValueError("Could not find 'root' or 'Pelvis' bone in the skeleton.")
+
+    # Get the number of frames in the animation
+    num_frames = animation_asset.get_editor_property("number_of_frames")
+
+    # Get Pelvis bone translation keys
+    _, pelvis_translations, _, _ = controller.get_bone_track_keys(pelvis_bone_index)
+
+    # Get root bone track keys
+    times, root_translations, root_rotations, root_scales = (
+        controller.get_bone_track_keys(root_bone_index)
+    )
+
+    # Verify the number of keys matches the frame count
+    if len(pelvis_translations) != num_frames or len(root_translations) != num_frames:
+        raise ValueError(
+            "The number of bone track keys does not match the frame count."
+        )
+
+    # Initialize cumulative Y-axis delta
+    cumulative_delta_y = 0.0
+    new_root_translations = []
+
+    # Process each frame
+    for frame in range(num_frames):
+        if frame > 0:
+            # Calculate Y-axis delta from Pelvis bone
+            prev_pelvis_y = pelvis_translations[frame - 1].y
+            current_pelvis_y = pelvis_translations[frame].y
+            delta_y = current_pelvis_y - prev_pelvis_y
+            cumulative_delta_y += delta_y
+
+        # Apply cumulative Y delta to root bone translation
+        root_trans = root_translations[frame]
+        new_root_trans = unreal.Vector(
+            root_trans.x, root_trans.y + cumulative_delta_y, root_trans.z
+        )
+        new_root_translations.append(new_root_trans)
+
+    # Update the root bone track with new translations
+    controller.set_bone_track_keys(
+        root_bone_index, times, new_root_translations, root_rotations, root_scales
+    )
+
+    # Save the modified animation asset
+    unreal.EditorAssetLibrary.save_loaded_asset(animation_asset)
+
+
+# 示例用法
+if __name__ == "__main__":
+    animation_path = "/Game/Monster/Mummy_01/Anim/Anim_Monster_Mummy_Long_Attack_03"
+    convert_to_root_motion(animation_path)

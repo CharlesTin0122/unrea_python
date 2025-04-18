@@ -4,5 +4,7 @@
     ],
     "python.analysis.extraPaths": [
         "H:\\PJXRes\\Projects\\PJX\\Intermediate\\PythonStub"
-    ]
+    ],
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "standard"
 }
