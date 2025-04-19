@@ -1,9 +1,9 @@
 {
     "python.autoComplete.extraPaths": [
-        "H:\\PJXRes\\Projects\\PJX\\Intermediate\\PythonStub"
+        "F:\\UnrealProject\\MyProject\\Intermediate\\PythonStub"
     ],
     "python.analysis.extraPaths": [
-        "H:\\PJXRes\\Projects\\PJX\\Intermediate\\PythonStub"
+        "F:\\UnrealProject\\MyProject\\Intermediate\\PythonStub"
     ],
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "standard"
