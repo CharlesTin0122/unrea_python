@@ -1,7 +1,7 @@
 import unreal
 
 # 骨骼匹配的字典
-bones_to_match = {
+bones_to_match: dict[str, str] = {
     "ik_foot_root": "root",
     "ik_foot_l": "foot_l",
     "ik_foot_r": "foot_r",
@@ -64,4 +64,3 @@ for source_bone_name, target_bone_name in bones_to_match.items():
     anim_data_ctrler.set_bone_track_keys(
         target_bone_name, positional_keys, rotational_keys, scaling_keys
     )
-unreal.load_asset

@@ -1,9 +1,9 @@
 {
     "python.autoComplete.extraPaths": [
-        "F:\\UnrealProject\\MyProject\\Intermediate\\PythonStub"
+        "D:\\Backup\\Documents\\UnrealEngine\\Python\\PythonStub"
     ],
     "python.analysis.extraPaths": [
-        "F:\\UnrealProject\\MyProject\\Intermediate\\PythonStub"
+        "D:\\Backup\\Documents\\UnrealEngine\\Python\\PythonStub"
     ],
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "standard"
